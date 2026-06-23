@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Casa Del Helado - Heladería Artesanal en Santo Domingo</title>
+  <meta name="description" content="La heladería más dulce de República Dominicana. Helados artesanales, batidas, jugos naturales y más. Ordena ahora con entrega a domicilio." />
+  <meta name="keywords" content="heladería, helados, batidas, jugos naturales, Santo Domingo, República Dominicana, La Casa Del Helado" />
+  <meta property="og:title" content="La Casa Del Helado" />
+  <meta property="og:description" content="Helados artesanales y antojitos dulces con entrega a domicilio en Santo Domingo." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            rose:    { DEFAULT: '#E8A0B4', light: '#F5D0DC', dark: '#C97A94' },
+            lilac:   { DEFAULT: '#C4A8D4', light: '#E8DAEF', dark: '#9E7FBA' },
+            cream:   { DEFAULT: '#FDF6F0', warm: '#FAF0E6' },
+            blush:   '#F9E8EE',
+            charcoal:'#2D2D2D',
+            muted:   '#7A7A7A',
+          },
+          fontFamily: {
+            display: ['Playfair Display', 'serif'],
+            body:    ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'fade-up':    'fadeUp 0.7s ease forwards',
+            'fade-in':    'fadeIn 0.6s ease forwards',
+            'float':      'float 4s ease-in-out infinite',
+            'slide-left': 'slideLeft 0.5s ease forwards',
+          },
+          keyframes: {
+            fadeUp:    { from: { opacity: 0, transform: 'translateY(30px)' }, to: { opacity: 1, transform: 'translateY(0)' } },
+            fadeIn:    { from: { opacity: 0 }, to: { opacity: 1 } },
+            float:     { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-12px)' } },
+            slideLeft: { from: { opacity: 0, transform: 'translateX(30px)' }, to: { opacity: 1, transform: 'translateX(0)' } },
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    :root {
+      --rose: #E8A0B4;
+      --rose-light: #F5D0DC;
+      --rose-dark: #C97A94;
+      --lilac: #C4A8D4;
+      --lilac-light: #E8DAEF;
+      --cream: #FDF6F0;
+      --blush: #F9E8EE;
+      --charcoal: #2D2D2D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--charcoal); overflow-x: hidden; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 3px; }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Nav glass */
+    .nav-glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(253,246,240,0.85); }
+
+    /* Hero gradient */
+    .hero-bg {
+      background: linear-gradient(135deg, #F9E8EE 0%, #EDD9F0 40%, #F5D0DC 70%, #FDF6F0 100%);
+    }
+
+    /* Product card */
+    .product-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(200,122,148,0.18); }
+
+    /* Category pill active */
+    .cat-pill.active { background: var(--rose-dark); color: white; }
+
+    /* Cart drawer */
+    .cart-overlay { transition: opacity 0.3s ease; }
+    .cart-drawer  { transition: transform 0.35s cubic-bezier(.4,0,.2,1); }
+    .cart-drawer.open  { transform: translateX(0); }
+    .cart-drawer.closed{ transform: translateX(100%); }
+
+    /* Modal */
+    .modal-bg { transition: opacity 0.3s ease; }
+
+    /* WhatsApp button */
+    .wa-btn { box-shadow: 0 4px 20px rgba(37,211,102,0.4); animation: float 4s ease-in-out infinite; }
+
+    /* Icon decorative ring */
+    .icon-ring {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Section divider */
+    .wavy-divider { overflow: hidden; line-height: 0; }
+
+    /* Input focus */
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--rose);
+      box-shadow: 0 0 0 3px rgba(232,160,180,0.2);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .product-card, .wa-btn { transition: none; animation: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<nav id="navbar" class="nav-glass fixed top-0 left-0 right-0 z-50 border-b border-rose-light/60 transition-all duration-300">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+
+    <!-- Logo -->
+    <a href="#inicio" class="flex items-center gap-2.5 group">
+      <div class="w-9 h-9 rounded-full flex items-center justify-center" style="background:var(--rose)">
+        <i data-lucide="ice-cream-bowl" class="w-5 h-5 text-white"></i>
+      </div>
+      <span class="font-display text-lg font-semibold" style="color:var(--charcoal)">La Casa Del Helado</span>
+    </a>
+
+    <!-- Desktop links -->
+    <div class="hidden md:flex items-center gap-7 text-sm font-medium" style="color:var(--charcoal)">
+      <a href="#inicio"   class="hover:text-rose-dark transition-colors">Inicio</a>
+      <a href="#menu"     class="hover:text-rose-dark transition-colors">Menú</a>
+      <a href="#nosotros" class="hover:text-rose-dark transition-colors">Nosotros</a>
+      <a href="#ubicacion"class="hover:text-rose-dark transition-colors">Ubicación</a>
+    </div>
+
+    <!-- Cart + Mobile menu -->
+    <div class="flex items-center gap-3">
+      <button id="cartBtn" class="relative p-2 rounded-full transition-colors hover:bg-rose-light/60" aria-label="Ver carrito">
+        <i data-lucide="shopping-bag" class="w-5 h-5" style="color:var(--charcoal)"></i>
+        <span id="cartBadge" class="absolute -top-0.5 -right-0.5 hidden w-5 h-5 text-xs font-bold text-white rounded-full flex items-center justify-center" style="background:var(--rose-dark)">0</span>
+      </button>
+      <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-rose-light/60 transition-colors" aria-label="Menú">
+        <i data-lucide="menu" class="w-5 h-5" style="color:var(--charcoal)"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="hidden md:hidden border-t border-rose-light/60 px-4 py-4 space-y-3 bg-white/95">
+    <a href="#inicio"    class="block py-2 text-sm font-medium hover:text-rose-dark" onclick="closeMobileMenu()">Inicio</a>
+    <a href="#menu"      class="block py-2 text-sm font-medium hover:text-rose-dark" onclick="closeMobileMenu()">Menú</a>
+    <a href="#nosotros"  class="block py-2 text-sm font-medium hover:text-rose-dark" onclick="closeMobileMenu()">Nosotros</a>
+    <a href="#ubicacion" class="block py-2 text-sm font-medium hover:text-rose-dark" onclick="closeMobileMenu()">Ubicación</a>
+  </div>
+</nav>
+
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section id="inicio" class="hero-bg min-h-screen flex items-center relative overflow-hidden pt-16">
+
+  <!-- Decorative blobs -->
+  <div class="absolute top-20 right-0 w-72 h-72 rounded-full opacity-30 pointer-events-none" style="background:radial-gradient(circle,#C4A8D4,transparent 70%); filter:blur(50px)"></div>
+  <div class="absolute bottom-10 left-0 w-64 h-64 rounded-full opacity-20 pointer-events-none" style="background:radial-gradient(circle,#E8A0B4,transparent 70%); filter:blur(60px)"></div>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 w-full py-20 md:py-28 grid md:grid-cols-2 gap-12 items-center">
+
+    <!-- Text -->
+    <div class="space-y-7" style="animation: fadeUp 0.8s ease forwards;">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium tracking-wide" style="background:rgba(232,160,180,0.2); color:var(--rose-dark)">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        Heladería artesanal en Santo Domingo
+      </div>
+
+      <h1 class="font-display text-5xl sm:text-6xl lg:text-7xl leading-tight" style="color:var(--charcoal)">
+        Momentos<br />
+        <em class="not-italic" style="color:var(--rose-dark)">dulces</em><br />
+        que perduran
+      </h1>
+
+      <p class="text-base leading-relaxed max-w-md" style="color:#5a5a5a">
+        Cada cucharada es una experiencia. Helados artesanales, batidas cremosas y sabores únicos preparados con amor en el corazón de la República Dominicana.
+      </p>
+
+      <div class="flex flex-wrap gap-3 pt-2">
+        <a href="#menu" class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-medium text-sm transition-all hover:shadow-lg hover:-translate-y-0.5" style="background:var(--rose-dark)">
+          <i data-lucide="utensils" class="w-4 h-4"></i>
+          Ver Menú
+        </a>
+        <button onclick="document.getElementById('orderModal').classList.remove('hidden')" class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium text-sm border-2 transition-all hover:shadow-md hover:-translate-y-0.5" style="border-color:var(--rose-dark); color:var(--rose-dark); background:white">
+          <i data-lucide="phone" class="w-4 h-4"></i>
+          Ordenar ahora
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex gap-8 pt-4 border-t border-rose-light">
+        <div>
+          <div class="font-display text-2xl font-bold" style="color:var(--rose-dark)">50+</div>
+          <div class="text-xs text-gray-500 mt-0.5">Sabores únicos</div>
+        </div>
+        <div>
+          <div class="font-display text-2xl font-bold" style="color:var(--rose-dark)">5K+</div>
+          <div class="text-xs text-gray-500 mt-0.5">Clientes felices</div>
+        </div>
+        <div>
+          <div class="font-display text-2xl font-bold" style="color:var(--rose-dark)">100%</div>
+          <div class="text-xs text-gray-500 mt-0.5">Artesanal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual -->
+    <div class="flex justify-center items-center relative" style="animation: fadeIn 1s ease 0.3s both">
+      <!-- Central icon composition -->
+      <div class="relative w-72 h-72 sm:w-96 sm:h-96">
+        <!-- Background ring -->
+        <div class="absolute inset-0 rounded-full" style="background:linear-gradient(135deg,rgba(232,160,180,0.25),rgba(196,168,212,0.25)); border: 2px solid rgba(232,160,180,0.3)"></div>
+        <!-- Inner ring -->
+        <div class="absolute inset-8 rounded-full" style="background:rgba(255,255,255,0.6); border: 1.5px solid rgba(232,160,180,0.2)"></div>
+
+        <!-- Center icon -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="text-center space-y-2">
+            <div class="w-24 h-24 mx-auto rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,var(--rose),var(--lilac))">
+              <i data-lucide="ice-cream-bowl" class="w-12 h-12 text-white"></i>
+            </div>
+            <div class="font-display text-lg font-semibold" style="color:var(--charcoal)">La Casa Del Helado</div>
+            <div class="text-xs" style="color:var(--muted)">Santo Domingo, RD</div>
+          </div>
+        </div>
+
+        <!-- Floating chips -->
+        <div class="absolute top-4 right-8 bg-white rounded-2xl px-3 py-2 shadow-md flex items-center gap-2" style="animation: float 3.5s ease-in-out infinite">
+          <i data-lucide="star" class="w-3.5 h-3.5" style="color:#F5A623; fill:#F5A623"></i>
+          <span class="text-xs font-medium">4.9 calificación</span>
+        </div>
+        <div class="absolute bottom-8 left-4 bg-white rounded-2xl px-3 py-2 shadow-md flex items-center gap-2" style="animation: float 4.5s ease-in-out infinite 1s">
+          <i data-lucide="truck" class="w-3.5 h-3.5" style="color:var(--rose-dark)"></i>
+          <span class="text-xs font-medium">Delivery disponible</span>
+        </div>
+        <div class="absolute top-1/2 -right-2 bg-white rounded-2xl px-3 py-2 shadow-md flex items-center gap-2" style="animation: float 5s ease-in-out infinite 0.5s">
+          <i data-lucide="leaf" class="w-3.5 h-3.5" style="color:#4CAF50"></i>
+          <span class="text-xs font-medium">Ingredientes naturales</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
+    <span class="text-xs" style="color:var(--muted)">Descubrir</span>
+    <div class="w-5 h-8 border-2 rounded-full flex items-start justify-center pt-1" style="border-color:var(--rose)">
+      <div class="w-1 h-2 rounded-full" style="background:var(--rose); animation: float 1.5s ease-in-out infinite"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FEATURES BAR
+============================================================ -->
+<section class="py-10" style="background:white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="reveal flex flex-col items-center text-center gap-3 p-4">
+        <div class="icon-ring" style="background:var(--blush)">
+          <i data-lucide="award" class="w-7 h-7" style="color:var(--rose-dark)"></i>
+        </div>
+        <div>
+          <div class="font-semibold text-sm">Calidad Premium</div>
+          <div class="text-xs text-gray-500 mt-0.5">Ingredientes seleccionados</div>
+        </div>
+      </div>
+      <div class="reveal flex flex-col items-center text-center gap-3 p-4" style="transition-delay:0.1s">
+        <div class="icon-ring" style="background:var(--lilac-light)">
+          <i data-lucide="truck" class="w-7 h-7" style="color:var(--lilac-dark)"></i>
+        </div>
+        <div>
+          <div class="font-semibold text-sm">Delivery Rápido</div>
+          <div class="text-xs text-gray-500 mt-0.5">Llegamos a tu puerta</div>
+        </div>
+      </div>
+      <div class="reveal flex flex-col items-center text-center gap-3 p-4" style="transition-delay:0.2s">
+        <div class="icon-ring" style="background:var(--blush)">
+          <i data-lucide="heart" class="w-7 h-7" style="color:var(--rose-dark)"></i>
+        </div>
+        <div>
+          <div class="font-semibold text-sm">Hecho con Amor</div>
+          <div class="text-xs text-gray-500 mt-0.5">Recetas artesanales</div>
+        </div>
+      </div>
+      <div class="reveal flex flex-col items-center text-center gap-3 p-4" style="transition-delay:0.3s">
+        <div class="icon-ring" style="background:var(--lilac-light)">
+          <i data-lucide="clock" class="w-7 h-7" style="color:var(--lilac-dark)"></i>
+        </div>
+        <div>
+          <div class="font-semibold text-sm">Siempre Frescos</div>
+          <div class="text-xs text-gray-500 mt-0.5">Preparados al momento</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     MENU SECTION
+============================================================ -->
+<section id="menu" class="py-20" style="background:var(--cream)">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+    <!-- Header -->
+    <div class="text-center mb-12 reveal">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium tracking-wide mb-4" style="background:rgba(232,160,180,0.15); color:var(--rose-dark)">
+        <i data-lucide="utensils" class="w-3.5 h-3.5"></i>
+        Nuestro Menú
+      </div>
+      <h2 class="font-display text-4xl sm:text-5xl font-semibold" style="color:var(--charcoal)">Elige tu favorito</h2>
+      <p class="mt-3 text-sm text-gray-500 max-w-md mx-auto">Desde helados clásicos hasta batidas tropicales, tenemos algo especial para cada antojo.</p>
+    </div>
+
+    <!-- Category pills -->
+    <div class="flex gap-2 overflow-x-auto pb-3 mb-8 scrollbar-hide reveal" id="categoryPills">
+      <button class="cat-pill active flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium border border-rose-light transition-all" data-cat="todos" style="background:var(--rose-dark); color:white">
+        Todos
+      </button>
+      <button class="cat-pill flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium border border-rose-light bg-white transition-all hover:border-rose-dark" data-cat="helados" style="color:var(--charcoal)">
+        <span class="flex items-center gap-1.5"><i data-lucide="ice-cream-bowl" class="w-3.5 h-3.5"></i> Helados</span>
+      </button>
+      <button class="cat-pill flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium border border-rose-light bg-white transition-all hover:border-rose-dark" data-cat="batidas" style="color:var(--charcoal)">
+        <span class="flex items-center gap-1.5"><i data-lucide="cup-soda" class="w-3.5 h-3.5"></i> Batidas</span>
+      </button>
+      <button class="cat-pill flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium border border-rose-light bg-white transition-all hover:border-rose-dark" data-cat="jugos" style="color:var(--charcoal)">
+        <span class="flex items-center gap-1.5"><i data-lucide="citrus" class="w-3.5 h-3.5"></i> Jugos Naturales</span>
+      </button>
+      <button class="cat-pill flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium border border-rose-light bg-white transition-all hover:border-rose-dark" data-cat="tostadas" style="color:var(--charcoal)">
+        <span class="flex items-center gap-1.5"><i data-lucide="sandwich" class="w-3.5 h-3.5"></i> Tostadas</span>
+      </button>
+      <button class="cat-pill flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium border border-rose-light bg-white transition-all hover:border-rose-dark" data-cat="otros" style="color:var(--charcoal)">
+        <span class="flex items-center gap-1.5"><i data-lucide="package" class="w-3.5 h-3.5"></i> Otros</span>
+      </button>
+    </div>
+
+    <!-- Search bar -->
+    <div class="relative mb-8 max-w-sm reveal">
+      <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+      <input id="searchInput" type="text" placeholder="Buscar producto..." class="w-full pl-10 pr-4 py-2.5 rounded-full border text-sm bg-white transition-all" style="border-color:#e0d0d8" />
+    </div>
+
+    <!-- Products grid -->
+    <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Cards injected by JS -->
+      <div class="col-span-full text-center py-16 text-gray-400">
+        <i data-lucide="loader-circle" class="w-8 h-8 mx-auto animate-spin mb-3" style="color:var(--rose)"></i>
+        <p class="text-sm">Cargando menú...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     NOSOTROS
+============================================================ -->
+<section id="nosotros" class="py-20" style="background:white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-14 items-center">
+
+    <!-- Visual -->
+    <div class="reveal order-2 md:order-1">
+      <div class="relative">
+        <div class="rounded-3xl p-10 text-center space-y-6" style="background:linear-gradient(135deg,var(--blush),var(--lilac-light))">
+          <div class="w-20 h-20 mx-auto rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,var(--rose),var(--lilac))">
+            <i data-lucide="store" class="w-10 h-10 text-white"></i>
+          </div>
+          <div class="font-display text-2xl font-semibold" style="color:var(--charcoal)">Desde 2018</div>
+          <p class="text-sm text-gray-600 leading-relaxed">Endulzando momentos en Santo Domingo con ingredientes frescos y recetas que nacen del corazón.</p>
+          <div class="grid grid-cols-2 gap-4 pt-2">
+            <div class="bg-white rounded-2xl p-4 text-center">
+              <div class="font-display text-xl font-bold" style="color:var(--rose-dark)">6+ años</div>
+              <div class="text-xs text-gray-500 mt-1">De experiencia</div>
+            </div>
+            <div class="bg-white rounded-2xl p-4 text-center">
+              <div class="font-display text-xl font-bold" style="color:var(--rose-dark)">7 días</div>
+              <div class="text-xs text-gray-500 mt-1">A la semana</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Text -->
+    <div class="reveal order-1 md:order-2 space-y-6" style="transition-delay:0.2s">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium tracking-wide" style="background:rgba(196,168,212,0.2); color:var(--lilac-dark)">
+        <i data-lucide="info" class="w-3.5 h-3.5"></i>
+        Nuestra historia
+      </div>
+      <h2 class="font-display text-4xl sm:text-5xl font-semibold leading-tight" style="color:var(--charcoal)">
+        Más que una heladería, una experiencia
+      </h2>
+      <p class="text-gray-600 leading-relaxed">
+        La Casa Del Helado nació con un sueño sencillo: crear un espacio donde cada persona pudiera encontrar su sabor favorito. Usamos ingredientes frescos, recetas propias y mucho amor en cada preparación.
+      </p>
+      <p class="text-gray-600 leading-relaxed">
+        Desde helados clásicos hasta creaciones originales, cada producto refleja nuestra pasión por la calidad y la satisfacción de nuestros clientes.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 pt-2">
+        <div class="flex items-center gap-3">
+          <div class="icon-ring w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--blush)">
+            <i data-lucide="leaf" class="w-4 h-4" style="color:var(--rose-dark)"></i>
+          </div>
+          <span class="text-sm font-medium">Ingredientes 100% naturales</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="icon-ring w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--blush)">
+            <i data-lucide="shield-check" class="w-4 h-4" style="color:var(--rose-dark)"></i>
+          </div>
+          <span class="text-sm font-medium">Higiene y calidad garantizada</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     UBICACION / MAPS
+============================================================ -->
+<section id="ubicacion" class="py-20" style="background:var(--cream)">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+    <div class="text-center mb-12 reveal">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium tracking-wide mb-4" style="background:rgba(232,160,180,0.15); color:var(--rose-dark)">
+        <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+        Encuéntranos
+      </div>
+      <h2 class="font-display text-4xl font-semibold" style="color:var(--charcoal)">Nuestra ubicación</h2>
+    </div>
+
+    <div class="grid md:grid-cols-5 gap-6 items-start">
+      <!-- Info cards -->
+      <div class="md:col-span-2 space-y-4 reveal">
+        <div class="bg-white rounded-2xl p-5 border border-rose-light flex items-start gap-4">
+          <div class="icon-ring w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--blush)">
+            <i data-lucide="map-pin" class="w-5 h-5" style="color:var(--rose-dark)"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-sm mb-1">Dirección</div>
+            <div class="text-sm text-gray-500">Santo Domingo, República Dominicana</div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-rose-light flex items-start gap-4">
+          <div class="icon-ring w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--blush)">
+            <i data-lucide="clock" class="w-5 h-5" style="color:var(--rose-dark)"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-sm mb-1">Horario</div>
+            <div class="text-sm text-gray-500">Lunes – Domingo</div>
+            <div class="text-sm text-gray-500">10:00 AM – 10:00 PM</div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-rose-light flex items-start gap-4">
+          <div class="icon-ring w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--blush)">
+            <i data-lucide="phone" class="w-5 h-5" style="color:var(--rose-dark)"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-sm mb-1">WhatsApp</div>
+            <a href="https://wa.me/18091234567" class="text-sm hover:underline" style="color:var(--rose-dark)">+1 (809) 000-0000</a>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-rose-light">
+          <div class="font-semibold text-sm mb-3">Síguenos</div>
+          <div class="flex gap-3">
+            <a href="#" class="w-9 h-9 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style="background:var(--blush)">
+              <i data-lucide="instagram" class="w-4 h-4" style="color:var(--rose-dark)"></i>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style="background:var(--blush)">
+              <i data-lucide="facebook" class="w-4 h-4" style="color:var(--rose-dark)"></i>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style="background:var(--blush)">
+              <i data-lucide="twitter" class="w-4 h-4" style="color:var(--rose-dark)"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="md:col-span-3 reveal" style="transition-delay:0.2s">
+        <div class="rounded-2xl overflow-hidden border border-rose-light shadow-sm" style="height:380px">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.11609823352!2d-70.23000000000001!3d18.483402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eaf88e7a7071023%3A0x9a1a90bc1c3d5d0!2sSanto%20Domingo%2C%20Dominican%20Republic!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+            width="100%" height="100%" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            title="Mapa de La Casa Del Helado">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer style="background:var(--charcoal); color:white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid md:grid-cols-3 gap-10">
+    <div class="space-y-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-full flex items-center justify-center" style="background:var(--rose)">
+          <i data-lucide="ice-cream-bowl" class="w-5 h-5 text-white"></i>
+        </div>
+        <span class="font-display text-lg font-semibold">La Casa Del Helado</span>
+      </div>
+      <p class="text-sm text-gray-400 leading-relaxed">Momentos dulces que perduran. Heladería artesanal en el corazón de Santo Domingo.</p>
+    </div>
+    <div class="space-y-3">
+      <div class="font-semibold text-sm mb-4">Menú</div>
+      <div class="text-sm text-gray-400 space-y-2">
+        <div>Helados</div>
+        <div>Batidas</div>
+        <div>Jugos Naturales</div>
+        <div>Tostadas</div>
+      </div>
+    </div>
+    <div class="space-y-3">
+      <div class="font-semibold text-sm mb-4">Contacto</div>
+      <div class="flex items-center gap-2 text-sm text-gray-400">
+        <i data-lucide="map-pin" class="w-4 h-4 flex-shrink-0"></i>
+        Santo Domingo, RD
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-400">
+        <i data-lucide="phone" class="w-4 h-4 flex-shrink-0"></i>
+        +1 (809) 000-0000
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-400">
+        <i data-lucide="mail" class="w-4 h-4 flex-shrink-0"></i>
+        info@lacasadelhelado.com
+      </div>
+    </div>
+  </div>
+  <div class="border-t border-white/10 py-5 text-center text-xs text-gray-500">
+    &copy; 2025 La Casa Del Helado. Todos los derechos reservados. &nbsp;|&nbsp;
+    <a href="admin/login.html" class="hover:text-gray-300 transition-colors">Admin</a>
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     CART DRAWER
+============================================================ -->
+<div id="cartOverlay" class="cart-overlay hidden fixed inset-0 bg-black/40 z-50" onclick="closeCart()"></div>
+<aside id="cartDrawer" class="cart-drawer closed fixed top-0 right-0 h-full w-full sm:w-96 bg-white z-50 flex flex-col shadow-2xl">
+
+  <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+    <div class="flex items-center gap-2">
+      <i data-lucide="shopping-bag" class="w-5 h-5" style="color:var(--rose-dark)"></i>
+      <span class="font-display text-lg font-semibold">Tu pedido</span>
+    </div>
+    <button onclick="closeCart()" class="p-1.5 rounded-full hover:bg-gray-100 transition-colors">
+      <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+    </button>
+  </div>
+
+  <div id="cartItems" class="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+    <div id="cartEmpty" class="flex flex-col items-center justify-center h-40 text-gray-400 gap-3">
+      <i data-lucide="shopping-bag" class="w-10 h-10 opacity-30"></i>
+      <p class="text-sm">Tu carrito está vacío</p>
+    </div>
+  </div>
+
+  <div id="cartFooter" class="hidden px-6 py-5 border-t border-gray-100 space-y-4">
+    <div class="flex items-center justify-between">
+      <span class="font-medium text-sm">Total</span>
+      <span id="cartTotal" class="font-display text-xl font-bold" style="color:var(--rose-dark)">RD$ 0</span>
+    </div>
+    <button onclick="openOrderModal()" class="w-full py-3 rounded-full text-white font-medium text-sm transition-all hover:opacity-90 hover:shadow-md" style="background:var(--rose-dark)">
+      Continuar con el pedido
+    </button>
+  </div>
+</aside>
+
+
+<!-- ============================================================
+     ORDER MODAL
+============================================================ -->
+<div id="orderModal" class="modal-bg hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+    <div class="px-7 py-6">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-display text-xl font-semibold" style="color:var(--charcoal)">Completar pedido</h3>
+        <button onclick="document.getElementById('orderModal').classList.add('hidden')" class="p-1.5 rounded-full hover:bg-gray-100 transition-colors">
+          <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+        </button>
+      </div>
+
+      <!-- Summary -->
+      <div id="orderSummary" class="rounded-2xl p-4 mb-6 space-y-2" style="background:var(--blush)">
+        <!-- populated by JS -->
+      </div>
+
+      <!-- Form -->
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1.5">Nombre completo *</label>
+          <input id="clientName" type="text" placeholder="Tu nombre" class="w-full px-4 py-2.5 rounded-xl border text-sm bg-white" style="border-color:#e0d0d8" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1.5">Teléfono / WhatsApp *</label>
+          <input id="clientPhone" type="tel" placeholder="+1 (809) 000-0000" class="w-full px-4 py-2.5 rounded-xl border text-sm bg-white" style="border-color:#e0d0d8" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1.5">Dirección de entrega *</label>
+          <input id="clientAddress" type="text" placeholder="Calle, número, sector..." class="w-full px-4 py-2.5 rounded-xl border text-sm bg-white" style="border-color:#e0d0d8" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1.5">Comentarios (opcional)</label>
+          <textarea id="clientNotes" rows="3" placeholder="Instrucciones especiales, alergias..." class="w-full px-4 py-2.5 rounded-xl border text-sm bg-white resize-none" style="border-color:#e0d0d8"></textarea>
+        </div>
+      </div>
+
+      <div id="orderError" class="hidden mt-3 text-xs text-red-500 flex items-center gap-1.5">
+        <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+        <span></span>
+      </div>
+
+      <div class="grid grid-cols-1 gap-3 mt-6">
+        <button onclick="sendOrderWhatsApp()" class="flex items-center justify-center gap-2 w-full py-3 rounded-full text-white font-medium text-sm transition-all hover:opacity-90" style="background:#25D366">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          Enviar por WhatsApp
+        </button>
+        <button onclick="saveOrderToSupabase()" class="flex items-center justify-center gap-2 w-full py-3 rounded-full text-white font-medium text-sm transition-all hover:opacity-90" style="background:var(--rose-dark)">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          Confirmar pedido
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     WHATSAPP FLOATING BUTTON
+============================================================ -->
+<a href="https://wa.me/18091234567?text=Hola%2C%20quiero%20hacer%20un%20pedido" target="_blank"
+   class="wa-btn fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg transition-transform hover:scale-110"
+   style="background:#25D366" aria-label="Contactar por WhatsApp">
+  <i data-lucide="message-circle" class="w-7 h-7"></i>
+</a>
+
+
+<!-- Scripts -->
+<script src="js/supabase.js"></script>
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
